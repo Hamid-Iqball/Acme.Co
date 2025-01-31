@@ -1,7 +1,7 @@
 /* eslint-disable no-fallthrough */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { useMemo, useReducer } from "react"
+import { createContext, useMemo, useReducer } from "react"
 
 //type of CartItemType
 export type CartItemType ={
@@ -93,7 +93,7 @@ const reducer = (state:CartStateType, action:ReducerAction):CartStateType =>{
 const useCartContext = (initCartState:CartStateType) =>{
     const [state,dispatch] = useReducer(reducer,initCartState)
 
-    const REDUCER_ACTIONS= useMemo(()=>{
+    const REDUCER_ACTIONS= useMemo(()=>{  //Memoization help with avoiding re rendering
         return REDUCER_ACTION_TYPE
     },[])
 
@@ -116,5 +116,18 @@ const useCartContext = (initCartState:CartStateType) =>{
         return itemA-itemB
     })
 
-return {dispatch,REDUCER_ACTIONS, totalItem,totalPrice,cart}
+    return {dispatch,REDUCER_ACTIONS, totalItem,totalPrice,cart}
 }
+
+export type useCartContextType = ReturnType<typeof useCartContext>
+
+
+const initCartContextState:useCartContextType = {
+    dispatch:()=>{},
+    REDUCER_ACTIONS:REDUCER_ACTION_TYPE,
+    totalItem:0,
+    totalPrice:'',
+    cart:[],
+}
+
+export const CartContext = createContext<useCartContextType>(initCartContextState)
