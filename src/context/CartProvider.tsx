@@ -1,9 +1,9 @@
 /* eslint-disable no-fallthrough */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { createContext, useMemo, useReducer } from "react"
+import { Children, createContext, ReactElement, useMemo, useReducer } from "react"
 
-//type of CartItemType
+//type of CartItemType (single cart item)
 export type CartItemType ={
     sku:string,
     name:string,
@@ -11,7 +11,7 @@ export type CartItemType ={
     qty:number
 }
 
-// type of 
+// type of cart (array of objects which are cartItemType)
 type CartStateType = {cart:CartItemType[]}
 
 //initialState
@@ -30,12 +30,13 @@ export type ReducerActionType = typeof REDUCER_ACTION_TYPE
 
 //type of reducer Action
 export type ReducerAction ={
-type:string,
+type:string, // The type of these must match the type of REDUCER_ACTION_TYPE
 payload?:CartItemType
 }
 
 const reducer = (state:CartStateType, action:ReducerAction):CartStateType =>{
     switch (action.type) {
+
         case REDUCER_ACTION_TYPE.ADD:{
             if(!action.payload){
                 throw new Error("action.payload is missing in ADD action")
@@ -61,6 +62,7 @@ const reducer = (state:CartStateType, action:ReducerAction):CartStateType =>{
             return {...state, cart:[...filteredCart]}
             
         }
+
         case REDUCER_ACTION_TYPE.QTY:{
             if(!action.payload){
                 throw new Error("action.payload is missing in Quantity action")
@@ -80,6 +82,7 @@ const reducer = (state:CartStateType, action:ReducerAction):CartStateType =>{
 
 
         }
+        
         case REDUCER_ACTION_TYPE.SUBMIT:{
             return {...state, cart:[]}
         }
@@ -130,4 +133,20 @@ const initCartContextState:useCartContextType = {
     cart:[],
 }
 
-export const CartContext = createContext<useCartContextType>(initCartContextState)
+const CartContext = createContext<useCartContextType>(initCartContextState)
+
+
+type ChildrenType = {
+    children?: ReactElement | ReactElement[]
+}
+
+export const  CartProvider = ({children}:ChildrenType):ReactElement=>{
+return (
+    <CartContext.Provider value={useCartContext(initCartState)}>
+{children}
+    </CartContext.Provider>
+)
+}
+
+
+export default CartContext
