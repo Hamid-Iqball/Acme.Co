@@ -2,7 +2,7 @@ import React from 'react'
 
 function ProductList() {
   return (
-    <div>ProductList</div>
+    <div className='flex-1'>ProductList</div>
   )
 }
 

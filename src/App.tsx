@@ -10,7 +10,7 @@ function App() {
  const pageContent = viewCart ? <Cart/> : <ProductList/>
 
  const content = (
-  <div className="bg-slate-100 h-screen flex flex-col gap-3">
+  <div className="bg-slate-100 h-screen flex flex-col gap-3 p-2">
   <Header viewCart ={viewCart} setViewCart={setViewCart} />
   {pageContent}
   <Footer viewCart={viewCart}/>
